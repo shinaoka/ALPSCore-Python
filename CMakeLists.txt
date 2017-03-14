@@ -33,8 +33,10 @@ include_directories(${Boost_INCLUDE_DIRS})
 include_directories(${PROJECT_SOURCE_DIR}/include)
 
 set(python_c_targets "")
+set(python_c_swig_targets "gf")#FIXME: QUICK HACK
 add_subdirectory(hdf5)
 add_subdirectory(mc)
+add_subdirectory(gf)
 
 add_subdirectory(python)
 

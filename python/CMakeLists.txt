@@ -1,6 +1,6 @@
 # Make a Python distribution
 
-set(pyfiles "alps/__init__.py" "alps/hdf5.py" "alps/mc.py")
+set(pyfiles "alps/__init__.py" "alps/hdf5.py" "alps/mc.py" "alps/gf.py")
 set(txtfiles "${CMAKE_SOURCE_DIR}/ACKNOWLEDGE.TXT"
              "${CMAKE_SOURCE_DIR}/COPYRIGHT.TXT"
              "${CMAKE_SOURCE_DIR}/LICENSE.TXT")
@@ -8,6 +8,7 @@ set(readme "${CMAKE_SOURCE_DIR}/README.md")
 set(manifest "${CMAKE_CURRENT_SOURCE_DIR}/MANIFEST.in")
 
 set(c_pydir "${CMAKE_CURRENT_BINARY_DIR}/alps/alps_c/")
+set(c_swig_pydir "${CMAKE_CURRENT_BINARY_DIR}/alps/")
 set(setup_file "${CMAKE_CURRENT_BINARY_DIR}/setup.py")
 set(copy_stamp_file "${CMAKE_CURRENT_BINARY_DIR}/copy.stamp")
 set(module_stamp_file "${CMAKE_CURRENT_BINARY_DIR}/python.stamp")
@@ -26,6 +27,14 @@ foreach(tgt_ ${python_c_targets})
                      APPEND
                      COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:${tgt_}> "${c_pydir}/"
                      # COMMAND ${CMAKE_COMMAND} -E touch "copy_${tgt_}.stamp"
+                     VERBATIM)
+endforeach()
+
+foreach(tgt_ ${python_c_swig_targets})
+  add_custom_command(OUTPUT ${copy_stamp_file} 
+                     DEPENDS ${tgt_}
+                     APPEND
+                     COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:${tgt_}> "${c_swig_pydir}/"
                      VERBATIM)
 endforeach()
 
