@@ -1,5 +1,5 @@
 # CMake script for testing
-set(tests hdf5)
+set(tests hdf5 gf)
 
 
 
