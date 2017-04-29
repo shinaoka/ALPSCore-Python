@@ -1,6 +1,6 @@
 # Make a Python distribution
 
-set(pyfiles "alps/__init__.py" "alps/hdf5.py" "alps/mc.py" "alps/gf.py")
+#set(pyfiles "alps/__init__.py" "alps/hdf5.py" "alps/mc.py" "alps/gf.py")
 set(txtfiles "${CMAKE_SOURCE_DIR}/ACKNOWLEDGE.TXT"
              "${CMAKE_SOURCE_DIR}/COPYRIGHT.TXT"
              "${CMAKE_SOURCE_DIR}/LICENSE.TXT")

@@ -3,10 +3,11 @@
 %{
 #define SWIG_FILE_WITH_INIT
 #include <alps/gf/gf.hpp>
-#include "gf.hpp"
+#include "gf_aux.hpp"
 %}
 
 %include "std_string.i"
+%include "numpy.i"
 
 /* This ignore directive must come before including header files */
 %ignore alps::gf::operator<<;
@@ -15,6 +16,8 @@
 %ignore alps::gf::three_index_gf::load;
 %ignore alps::gf::four_index_gf::load;
 %ignore alps::gf::five_index_gf::load;
+
+%ignore alps::gf::three_index_gf::data;
 
 %pythoncode %{ 
 import alps.hdf5
@@ -56,7 +59,7 @@ def get_python_gf_type(h5, path):
         type_name += get_python_mesh_type(h5, path+'/mesh/'+str(im+1))
     return type_name
 
-#Very ad hoc implementation.
+#Very ad hoc implementation
 def load_gf(file_name, path):
     f = alps.hdf5.archive(file_name, 'r')
     python_name = get_python_gf_type(f, path)
@@ -74,7 +77,25 @@ def save_gf(gf, file_name, path):
 %include <alps/gf/gf.hpp>
 %include <alps/gf/mesh.hpp>
 %include <alps/gf/piecewise_polynomial.hpp>
-%include "gf.hpp"
+%include "gf_aux.hpp"
+
+namespace alps {
+namespace gf {
+%extend three_index_gf {
+    void _get_data_buffer(VTYPE **ARGOUTVIEW_CARRAY2, int *DIM1, int *DIM2) {
+        *ARGOUTVIEW_CARRAY2 = data_.origin();
+        *DIM1 = data_.shape[0];
+        *DIM2 = data_.shape[1];
+    }
+}
+
+%pythoncode three_index_gf %{ 
+    def data():
+        return self._get_data_buffer()
+%}
+
+}
+}
 
 /*
 %template(legendre_gf) alps::gf::one_index_gf< std::complex<double>, alps::gf::legendre_mesh >;
